@@ -1,11 +1,11 @@
 <script setup lang="ts">
-/*import { onMounted } from 'vue'*/
+import { onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-/*import { useTasks } from './composables/useTasks'
+import { useTasks } from './composables/useTasks'
 
 const { fetchTasks } = useTasks()
 
-onMounted(fetchTasks)*/
+onMounted(fetchTasks)
 </script>
 
 <template>
