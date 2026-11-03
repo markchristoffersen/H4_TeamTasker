@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import type { TaskItem } from '../types/task'
+import { computed } from 'vue'
 
-defineProps<{
-  task: TaskItem;
-}>();
+const props = defineProps<{ task: TaskItem; index: number }>()
+
+const dateLable = computed(() => 
+	new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric'}).format(new Date(`${props.task.date}T12:00:00`)),
+)
+
+
 
 </script>
 
@@ -15,6 +20,7 @@ defineProps<{
 			<p>{{ task.description }}</p>
 			<p>Status: {{ task.status }}</p>
 			<p>priority: {{ task.priority }}</p>
+			<p>date: {{ dateLable }}</p>
 		</div>
 	</article>
 

@@ -2,66 +2,64 @@
 
 <script setup lang="ts">
 import TaskCard from '../components/TaskCard.vue'
-import {TASK_STATUS, TASK_PRIORITY, type TaskItem } from '../types/task'
+import type { TaskItem } from '../types/task'
+import { ref, computed } from 'vue'
 
-const tasks: TaskItem[] = [
-  {
-	id: 1,
-	title: 'Task 1',
-	description: 'This is the first task',
-	status: TASK_STATUS[0],
-	priority: TASK_PRIORITY[0],
-  },
-  {
-	id: 2,
-	title: 'Task 2',
-	description: 'This is the second task',
-	status: TASK_STATUS[1],
-	priority: TASK_PRIORITY[1],
-  },
-  {
-	id: 3,
-	title: 'Task 3',
-	description: 'This is the third task',
-	status: TASK_STATUS[2],
-	priority: TASK_PRIORITY[2],
-  },
-   {
-	id: 4,
-	title: 'Task 2',
-	description: 'This is the second task',
-	status: TASK_STATUS[1],
-	priority: TASK_PRIORITY[1],
-  },
-  {
-	id: 5,
-	title: 'Task 3',
-	description: 'This is the third task',
-	status: TASK_STATUS[2],
-	priority: TASK_PRIORITY[2],
-  },
-   {
-	id: 6,
-	title: 'Task 2',
-	description: 'This is the second task',
-	status: TASK_STATUS[1],
-	priority: TASK_PRIORITY[1],
-  },
-  {
-	id: 7,
-	title: 'Task 3',
-	description: 'This is the third task',
-	status: TASK_STATUS[2],
-	priority: TASK_PRIORITY[2],
-  },
 
-];
+const filteredTasks: TaskItem[] = [
+    {
+        userId: 1,
+        id: 1,
+        title: 'Test task one',
+        description: 'A sample task to check the card layout.',
+        status: 'Not started',
+        priority: 'High',
+        date: '2026-11-10',
+    },
+    {
+        userId: 1,
+        id: 2,
+        title: 'Test task two',
+        description: 'Another sample task for testing.',
+        status: 'In progress',
+        priority: 'Medium',
+        date: '2026-11-12',
+    },
+	 {
+        userId: 1,
+        id: 3,
+        title: 'Test task two',
+        description: 'Another sample task for testing.',
+        status: 'In progress',
+        priority: 'Medium',
+        date: '2026-11-12',
+    },
+	 {
+        userId: 1,
+        id: 4,
+        title: 'Test task two',
+        description: 'Another sample task for testing.',
+        status: 'In progress',
+        priority: 'Medium',
+        date: '2026-11-12',
+    },
+	 {
+        userId: 1,
+        id: 5,
+        title: 'Test task two',
+        description: 'Another sample task for testing.',
+        status: 'In progress',
+        priority: 'Medium',
+        date: '2026-11-12',
+    },
+]
+
 
 </script>
 
 <template>
 	<div class="task-grid">
-	<TaskCard v-for="task in tasks" :key="task.id" :task="task" />
+		<TaskCard v-for="(task, index) in filteredTasks" :key="task.id" :task="task" :index="index" />
 	</div>
 </template>
 
