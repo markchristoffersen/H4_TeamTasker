@@ -26,7 +26,10 @@ defineProps<{
 		padding: 1rem;
 		margin: 1rem 0;
 		border-radius: 8px;
-		background-color: darkblue;
+		width: 100%;
+		max-width: 15rem;
+		justify-self: center;
+		background-color: var(--vt-c-indigo);
 	}
 
 </style>
