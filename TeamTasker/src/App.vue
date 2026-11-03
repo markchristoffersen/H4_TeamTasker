@@ -27,9 +27,6 @@ onMounted(fetchTasks)*/
       <RouterView />
     </main>
 
-    <footer class="site-footer">
-      <span>Make room for good ideas.</span>
-      <span>Gather · Learn something new</span>
-    </footer>
+    
   </div>
 </template>
