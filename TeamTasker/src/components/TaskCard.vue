@@ -29,7 +29,8 @@ defineProps<{
 		width: 100%;
 		max-width: 15rem;
 		justify-self: center;
-		background-color: var(--vt-c-indigo);
+		background-color: var(--secondary-color);
+		color: var(--accent-color);
 	}
 
 </style>
