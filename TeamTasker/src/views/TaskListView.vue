@@ -2,62 +2,31 @@
 
 <script setup lang="ts">
 import TaskCard from '../components/TaskCard.vue'
-import type { TaskItem } from '../types/task'
+import TaskFilters from '../components/TaskFilters.vue'
+import { useTasks } from '../composables/useTasks'
+import { RouterLink } from 'vue-router'
 import { ref, computed } from 'vue'
 
 
-const filteredTasks: TaskItem[] = [
-    {
-        userId: 1,
-        id: 1,
-        title: 'Test task one',
-        description: 'A sample task to check the card layout.',
-        status: 'Not started',
-        priority: 'High',
-        date: '2026-11-10',
-    },
-    {
-        userId: 1,
-        id: 2,
-        title: 'Test task two',
-        description: 'Another sample task for testing.',
-        status: 'In progress',
-        priority: 'Medium',
-        date: '2026-11-12',
-    },
-	 {
-        userId: 1,
-        id: 3,
-        title: 'Test task two',
-        description: 'Another sample task for testing.',
-        status: 'In progress',
-        priority: 'Medium',
-        date: '2026-11-12',
-    },
-	 {
-        userId: 1,
-        id: 4,
-        title: 'Test task two',
-        description: 'Another sample task for testing.',
-        status: 'In progress',
-        priority: 'Medium',
-        date: '2026-11-12',
-    },
-	 {
-        userId: 1,
-        id: 5,
-        title: 'Test task two',
-        description: 'Another sample task for testing.',
-        status: 'In progress',
-        priority: 'Medium',
-        date: '2026-11-12',
-    },
-]
+const { tasks, isLoading, errorMessage, fetchTasks } = useTasks()
+const search = ref('')
+const status = ref('')
+const priority = ref('')
 
+const filteredTasks = computed(() => {
+  const query = search.value.trim().toLocaleLowerCase()
+  return tasks.value.filter((task) => {
+    const matchesSearch = !query || `${task.title} ${task.description}`.toLocaleLowerCase().includes(query)
+    const matchesStatus = !status.value || task.status === status.value
+    const matchesPriority = !priority.value || task.priority === priority.value
+    return matchesSearch && matchesStatus && matchesPriority
+  })
+})
 
 </script>
 
 <template>
+  <TaskFilters v-model:search="search" v-model:status="status" v-model:priority="priority" />
 	<div class="task-grid">
 		<TaskCard v-for="(task, index) in filteredTasks" :key="task.id" :task="task" :index="index" />
 	</div>

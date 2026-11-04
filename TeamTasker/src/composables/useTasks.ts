@@ -8,12 +8,13 @@ const localTasks = ref<TaskItem[]>([])
 let hasFetched = false
 let nextLocalId = -1
 
+const statusus = computed(() => [...new Set(tasks.value.map((task) => task.status))].sort())
 const priorities = computed(() => [...new Set(tasks.value.map((task) => task.priority))].sort())
 
 // Uses posts endpoint from the jsonplaceholder api instead of todos as they have a body to put into the description
 function mapTodoToTask(todo: { userId: number; id: number; title: string; body: string }): TaskItem {
     const status = TASK_STATUS[(Math.abs(todo.id) - 1) % TASK_STATUS.length] ?? TASK_STATUS[0]
-    const priority = TASK_PRIORITY[(Math.abs(todo.id) - 1) % TASK_PRIORITY.length] ?? TASK_PRIORITY[0]
+    const priority = TASK_PRIORITY[(Math.abs(todo.userId) - 1) % TASK_PRIORITY.length] ?? TASK_PRIORITY[0]
     const date = new Date()
     date.setDate(date.getDate() + (todo.id % 30) + 1)
     const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
@@ -62,5 +63,5 @@ function getTaskById(id: number) {
 }
 
 export function useTasks() {
-    return { tasks, priorities, isLoading, errorMessage, fetchTasks, addTask, getTaskById }
+    return { tasks, statusus, priorities, isLoading, errorMessage, fetchTasks, addTask, getTaskById }
 }
