@@ -41,7 +41,9 @@ async function fetchTasks() {
         if (!response.ok) throw new Error('The task list could not be loaded right now.')
 
         const todos = (await response.json()) as { id: number; title: string; body: string; userId: number }[]
-        tasks.value = [...localTasks.value, ...todos.map(mapTodoToTask)]
+        const remoteTasks = todos.map(mapTodoToTask)
+        const localTaskIds = new Set(localTasks.value.map((task) => task.id))
+        tasks.value = [...localTasks.value, ...remoteTasks.filter((task) => !localTaskIds.has(task.id))]
     } catch {
         errorMessage.value = 'We couldn’t load the tasks. Please check your connection and try again.'
         hasFetched = false
@@ -51,11 +53,31 @@ async function fetchTasks() {
 }
 
 function addTask(task: NewTask) {
-    const newTask: TaskItem = { ...task, id: nextLocalId-- }
+    const newTask: TaskItem = { ...task, userId: 1, id: nextLocalId-- }
     errorMessage.value = ''
     localTasks.value.unshift(newTask)
     tasks.value.unshift(newTask)
     return newTask
+}
+
+function updateTask(id: number, task: NewTask) {
+    const taskIndex = tasks.value.findIndex((currentTask) => currentTask.id === id)
+    if (taskIndex === -1) return undefined
+
+    const currentTask = tasks.value[taskIndex]
+    if (!currentTask) return undefined
+
+    const updatedTask: TaskItem = { ...currentTask, ...task }
+    tasks.value.splice(taskIndex, 1, updatedTask)
+
+    const localTaskIndex = localTasks.value.findIndex((currentTask) => currentTask.id === id)
+    if (localTaskIndex === -1) {
+        localTasks.value.unshift(updatedTask)
+    } else {
+        localTasks.value.splice(localTaskIndex, 1, updatedTask)
+    }
+
+    return updatedTask
 }
 
 function getTaskById(id: number) {
@@ -63,5 +85,5 @@ function getTaskById(id: number) {
 }
 
 export function useTasks() {
-    return { tasks, statusus, priorities, isLoading, errorMessage, fetchTasks, addTask, getTaskById }
+    return { tasks, statusus, priorities, isLoading, errorMessage, fetchTasks, addTask, updateTask, getTaskById }
 }
