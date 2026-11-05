@@ -44,7 +44,7 @@ const priorityClass = computed(() => `priority-${props.task.priority.toLowerCase
   margin: 0;
   border-radius: 0.875rem;
   background: var(--secondary-color);
-  color: white;
+  color: var(--text-color);
   box-shadow: 0 0.5rem 1.25rem rgb(9 35 40);
   cursor: pointer;
 }
@@ -58,6 +58,7 @@ const priorityClass = computed(() => `priority-${props.task.priority.toLowerCase
   font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.3;
+  color: var(--text-color);
 }
 
 .priority-badge {
@@ -71,19 +72,19 @@ const priorityClass = computed(() => `priority-${props.task.priority.toLowerCase
 .priority-low {
   border: 2px solid rgb(59 130 246 / 50%);
   background: rgb(59 130 246 / 20%);
-  color: white;
+  color: var(--text-color);
 }
 
 .priority-medium {
   border: 2px solid rgb(255 193 7 / 50%);
   background: rgb(255 193 7 / 20%);
-  color: white;
+  color: var(--text-color);
 }
 
 .priority-high {
   border: 2px solid rgb(255 107 107 / 50%);
   background: rgb(255 107 107 / 30%);
-  color: white;
+  color: var(--text-color);
 }
 
 </style>

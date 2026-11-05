@@ -68,14 +68,14 @@ const dateLabel = computed(() => task.value
   border: 1px solid rgb(139 187 146);
   border-radius: 18px;
   background: var(--secondary-color);
-  color: white;
+  color: var(--text-color);
   box-shadow: 0 16px 36px rgb(9 35 40);
   z-index: 10;
 }
 
 .task-detail > p:nth-child(2) {
   padding-bottom: 1.5rem;
-  color: rgb(255 255 255);
+  color: var(--text-color);
   line-height: 1.8;
 }
 
@@ -95,13 +95,12 @@ const dateLabel = computed(() => task.value
   padding: 0.6rem 0.9rem;
   border-radius: 10px;
   background: var(--tertiary-color);
-  color: white;
+  color: var(--text-color);
   line-height: 1.5;
 }
 
 .detail-status {
   margin: 3rem auto;
-  color: var(--secondary-color);
   text-align: center;
 }
 
@@ -110,11 +109,11 @@ const dateLabel = computed(() => task.value
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--tertiary-color);
   border-radius: 0.5rem;
-  color: white;
+  color: var(--text-color);
   text-decoration: none;
 }
 .back-button:hover {
   background: var(--main-color);
-  color: white;
+  color: var(--text-color);
 }
 </style>
