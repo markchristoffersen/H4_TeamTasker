@@ -43,5 +43,6 @@ const filteredTasks = computed(() => {
 		padding: 2% 10%;
 	}
 	
+	
 
 </style>
