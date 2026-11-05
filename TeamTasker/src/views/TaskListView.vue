@@ -6,7 +6,7 @@ import TaskFilters from '../components/TaskFilters.vue'
 import { useTasks } from '../composables/useTasks'
 import { RouterLink } from 'vue-router'
 import { ref, computed } from 'vue'
-
+import { RouterView } from 'vue-router'
 
 const { tasks, isLoading, errorMessage, fetchTasks } = useTasks()
 const search = ref('')
@@ -30,6 +30,7 @@ const filteredTasks = computed(() => {
 	<div class="task-grid">
 		<TaskCard v-for="(task, index) in filteredTasks" :key="task.id" :task="task" :index="index" />
 	</div>
+	<RouterView />
 </template>
 
 <style scoped>
