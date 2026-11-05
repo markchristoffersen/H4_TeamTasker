@@ -41,20 +41,22 @@ const emit = defineEmits<{
 <style scoped>
 .filter-bar { display: flex; gap: 10px; width: 100%; }
 .search-field,
-.status-field { display: flex; min-height: 49px; align-items: center; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); }
-.priority-field { display: flex; min-height: 49px; align-items: center; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); }
-.search-field { flex: 1; gap: 10px; padding: 0 14px; }
-.search-icon { color: var(--muted); font-size: 24px; line-height: 1; transform: rotate(-20deg); }
+.status-field { display: flex; min-height: 49px; align-items: center; border: 1px solid var(--accent-color); border-radius: 7px; background: var(--tertiary-color);}
+.status-field select{color: var(--text-color)}
+.priority-field { display: flex; min-height: 49px; align-items: center; border: 1px solid var(--accent-color); border-radius: 7px; background: var(--tertiary-color); }
+.priority-field select{color: var(--text-color)}
+.search-field { flex: 1; gap: 10px; padding: 0 14px; background: var(--tertiary-color);border: 1px solid var(--accent-color);}
+.search-icon { color: var(--text-color); font-size: 24px; line-height: 1; transform: rotate(-20deg); }
 input,
 select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: 12px; }
 input { width: 100%; }
-input::placeholder { color: #93948d; }
-kbd { flex: none; border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; color: var(--muted); font-family: inherit; font-size: 9px; }
+input::placeholder { color: var(--text-color) }
+kbd { flex: none; border: 1px solid var(--accent-color); border-radius: 4px; padding: 3px 6px; color: var(--text-color); font-family: inherit; font-size: 9px; }
 .status-field { position: relative; width: 170px; padding: 0 13px; }
 .priority-field { position: relative; width: 170px; padding: 0 13px; }
 select { width: 100%; appearance: none; cursor: pointer; }
 .select-chevron { position: absolute; right: 13px; color: var(--muted); pointer-events: none; }
-.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%);}
 
 @media (max-width: 540px) {
   .filter-bar { flex-direction: column; }
