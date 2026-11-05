@@ -14,4 +14,4 @@ export interface TaskItem {
     date: string
 }
 
-export type NewTask = TaskItem
+export type NewTask = Omit<TaskItem, 'userId' | 'id'>
