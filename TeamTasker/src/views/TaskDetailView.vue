@@ -1,9 +1,19 @@
 <!--TODO: This is supposed to be the detail view of a selected task-->
 
 <script setup lang="ts">
+import TaskForm from '../components/TaskForm.vue'
 import { useTasks } from '../composables/useTasks'
 import { ref, computed } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
+import type { NewTask } from '../types/task'
+
+/*const router = useRouter()
+const { addTask } = useTasks()
+
+function createTask(task: NewTask) {
+  const newTask = addTask(task)
+  router.push({ name: 'task-detail', params: { id: newTask.id } })
+}*/
 
 const route = useRoute()
 const { getTaskById, isLoading, errorMessage } = useTasks()

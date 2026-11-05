@@ -26,6 +26,7 @@ const filteredTasks = computed(() => {
 </script>
 
 <template>
+  <RouterLink to="/create">Create a task ↗</RouterLink>
   <TaskFilters v-model:search="search" v-model:status="status" v-model:priority="priority" />
 	<div class="task-grid">
 		<TaskCard v-for="(task, index) in filteredTasks" :key="task.id" :task="task" :index="index" />
