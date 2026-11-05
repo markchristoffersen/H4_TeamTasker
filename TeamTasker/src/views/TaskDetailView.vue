@@ -1,25 +1,18 @@
 <!--TODO: This is supposed to be the detail view of a selected task-->
 
 <script setup lang="ts">
-import TaskForm from '../components/TaskForm.vue'
 import { useTasks } from '../composables/useTasks'
-import { ref, computed } from 'vue'
-import { useRoute, useRouter, RouterLink } from 'vue-router'
-import type { NewTask } from '../types/task'
-
-/*const router = useRouter()
-const { addTask } = useTasks()
-
-function createTask(task: NewTask) {
-  const newTask = addTask(task)
-  router.push({ name: 'task-detail', params: { id: newTask.id } })
-}*/
+import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
 const route = useRoute()
 const { getTaskById, isLoading, errorMessage } = useTasks()
+
 const task = computed(() => {
-  const id = Number(route.params.id)
-  return Number.isInteger(id) ? getTaskById(id) : undefined
+  const param = route.params.id
+  if (typeof param !== 'string') return undefined
+  const id = Number(param)
+  return Number.isSafeInteger(id) ? getTaskById(id) : undefined
 })
 
 const dateLabel = computed(() => task.value
@@ -29,26 +22,32 @@ const dateLabel = computed(() => task.value
 
 <template>
   <p v-if="isLoading && !task" class="detail-status" role="status">Loading task details…</p>
-  <section v-else-if="task" class="detail-content">
-	<router-link to="/" class="detail-backdrop"></router-link>
+  <section v-else class="detail-content">
+	<RouterLink to="/" class="detail-backdrop" aria-label="Close task details"></RouterLink>
      <article class="task-detail">
-		<router-link to="/" class="back-button"> Tilbage </router-link>
-      <h1>{{ task.title }}</h1>
+		<RouterLink to="/" class="back-button">Back to tasks</RouterLink>
+      <template v-if="task">
+        <h1>{{ task.title }}</h1>
 
-      <div class="description">
-        <h2>Beskrivelse</h2>
-        <p>{{ task.description }}</p>
-      </div>
+        <div class="description">
+          <h2>Description</h2>
+          <p>{{ task.description }}</p>
+        </div>
 
-      <div class="task-info">
-        <p>Status: {{ task.status }}</p>
-        <p>Priority: {{ task.priority }}</p>
-        <p>Dato: {{ dateLabel }}</p>
-      </div>
-	  
-    </article>
+        <div class="task-info">
+          <p>Status: {{ task.status }}</p>
+          <p>Priority: {{ task.priority }}</p>
+          <p>Due date: {{ dateLabel }}</p>
+        </div>
+
+        <RouterLink class="edit-button" :to="{ name: 'task-edit', params: { id: task.id } }">Edit task</RouterLink>
+      </template>
+      <template v-else>
+        <h1>Task unavailable</h1>
+        <p>{{ errorMessage || 'This task could not be found.' }}</p>
+      </template>
+	    </article>
   </section>
-
 </template>
 
 <style scoped>
@@ -65,6 +64,7 @@ const dateLabel = computed(() => task.value
 .detail-content {
   position: fixed;
   inset: 0;
+  display: grid;
   width: 100%;
   height: 100%;
   place-content: center;
@@ -126,4 +126,14 @@ const dateLabel = computed(() => task.value
   background: var(--main-color);
   color: var(--text-color);
 }
+.edit-button {
+  display: inline-flex;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--main-color);
+  color: var(--text-color);
+  text-decoration: none;
+}
+.edit-button:hover { background: var(--tertiary-color); }
 </style>

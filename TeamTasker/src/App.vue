@@ -18,7 +18,7 @@ onMounted(fetchTasks)
         </RouterLink>
         <nav class="main-nav" aria-label="Main navigation">
           <RouterLink to="/" class="nav-link">Explore</RouterLink>
-          <RouterLink to="/create" class="nav-cta">Create event <span aria-hidden="true">+</span></RouterLink>
+          <RouterLink to="/create" class="nav-cta">Create task <span aria-hidden="true">+</span></RouterLink>
         </nav>
       </div>
     </header>

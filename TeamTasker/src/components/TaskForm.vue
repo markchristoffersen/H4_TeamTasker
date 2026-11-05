@@ -1,25 +1,43 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { TASK_STATUS, TASK_PRIORITY, type NewTask } from '../types/task'
+import { reactive, ref, watch } from 'vue'
+import { TASK_STATUS, TASK_PRIORITY, type NewTask, type TaskItem } from '../types/task'
+import { getTaskFormError, todayAsDateString, type TaskFormValues } from '../utils/taskForm'
 
-const emit = defineEmits<{ submit: [task: NewTask] }>()
+const props = withDefaults(defineProps<{ initialTask?: TaskItem; isEditing?: boolean }>(), { isEditing: false })
+const emit = defineEmits<{ submit: [task: NewTask]; cancel: [] }>()
 
-const form = reactive({ title: '', description: '', priority: '' })
+const form = reactive<TaskFormValues>({
+  title: '',
+  description: '',
+  status: TASK_STATUS[0],
+  priority: '',
+  date: todayAsDateString(),
+})
 const errorMessage = ref('')
 
+watch(() => props.initialTask, (task) => {
+  form.title = task?.title ?? ''
+  form.description = task?.description ?? ''
+  form.status = task?.status ?? TASK_STATUS[0]
+  form.priority = task?.priority ?? ''
+  form.date = task?.date ?? todayAsDateString()
+  errorMessage.value = ''
+}, { immediate: true })
+
 function submitForm() {
-  if (!form.title.trim() || !form.priority ) {
-    errorMessage.value = 'Please add a title, and choose a priority.'
+  const validationError = getTaskFormError(form)
+  if (validationError) {
+    errorMessage.value = validationError
     return
   }
 
   errorMessage.value = ''
   emit('submit', {
     title: form.title.trim(),
-    description: form.description.trim() || 'Placeholder text.',
-    status: TASK_STATUS[0],
+    description: form.description.trim(),
+    status: form.status,
     priority: form.priority as NewTask['priority'],
-    date: new Date().toISOString(),
+    date: form.date,
   })
 }
 </script>
@@ -38,6 +56,16 @@ function submitForm() {
           <option v-for="priority in TASK_PRIORITY" :key="priority" :value="priority">{{ priority }}</option>
         </select>
       </label>
+      <label class="form-field">
+        <span>Status</span>
+        <select v-model="form.status">
+          <option v-for="status in TASK_STATUS" :key="status" :value="status">{{ status }}</option>
+        </select>
+      </label>
+      <label class="form-field">
+        <span>Due date <span class="required-mark">*</span></span>
+        <input v-model="form.date" type="date" required />
+      </label>
     </div>
 
     <label class="form-field">
@@ -47,7 +75,10 @@ function submitForm() {
     <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
     <div class="form-actions">
       <p><span class="required-mark">*</span> Required fields</p>
-      <button class="button-primary" type="submit">Publish task <span aria-hidden="true">↗</span></button>
+      <div class="action-buttons">
+        <button class="button-secondary" type="button" @click="emit('cancel')">Cancel</button>
+        <button class="button-primary" type="submit">{{ isEditing ? 'Save changes' : 'Create task' }} <span aria-hidden="true">↗</span></button>
+      </div>
     </div>
   </form>
 </template>
@@ -66,9 +97,11 @@ function submitForm() {
 .form-error { margin: -8px 0 0; color: #a24537; font-size: 12px; }
 .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; }
 .form-actions p { margin: 0; color: var(--muted); font-size: 11px; }
+.action-buttons { display: flex; align-items: center; gap: 10px; }
 .button-primary { display: inline-flex; min-height: 46px; align-items: center; gap: 24px; border: 0; border-radius: 5px; padding: 0 18px; background: var(--ink); color: white; cursor: pointer; font: inherit; font-size: 12px; transition: background 160ms ease; }
 .button-primary:hover { background: var(--accent); }
 .button-primary span { font-size: 16px; }
+.button-secondary { min-height: 46px; border: 1px solid var(--line); border-radius: 5px; padding: 0 16px; background: transparent; color: var(--ink); cursor: pointer; font: inherit; font-size: 12px; }
 
 @media (max-width: 540px) {
   .field-row { grid-template-columns: 1fr; }
