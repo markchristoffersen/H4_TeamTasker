@@ -55,7 +55,7 @@ kbd { flex: none; border: 1px solid var(--accent-color); border-radius: 4px; pad
 .status-field { position: relative; width: 170px; padding: 0 13px; }
 .priority-field { position: relative; width: 170px; padding: 0 13px; }
 select { width: 100%; appearance: none; cursor: pointer; }
-.select-chevron { position: absolute; right: 13px; color: var(--muted); pointer-events: none; }
+.select-chevron { position: absolute; right: 13px; color: var(--text-color); pointer-events: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%);}
 
 @media (max-width: 540px) {

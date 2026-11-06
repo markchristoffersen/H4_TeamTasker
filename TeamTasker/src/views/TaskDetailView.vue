@@ -18,6 +18,8 @@ const task = computed(() => {
 const dateLabel = computed(() => task.value
     ? new Intl.DateTimeFormat('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(`${task.value.date}T12:00:00`))
     : '')
+
+const priorityClass = computed(() => `priority-${task.value.priority.toLowerCase()}`)
 </script>
 
 <template>
@@ -35,9 +37,11 @@ const dateLabel = computed(() => task.value
         </div>
 
         <div class="task-info">
-          <p>Status: {{ task.status }}</p>
-          <p>Priority: {{ task.priority }}</p>
-          <p>Due date: {{ dateLabel }}</p>
+		  <span class="priority-badge" :class="priorityClass">
+		  <p>Priority: {{ task.priority }}</p>
+		  </span>
+          <p class="task-info-text">Status: {{ task.status }}</p>
+          <p class="task-info-text">Due date: {{ dateLabel }}</p>
         </div>
 
         <RouterLink class="edit-button" :to="{ name: 'task-edit', params: { id: task.id } }">Edit task</RouterLink>
@@ -73,8 +77,8 @@ const dateLabel = computed(() => task.value
 
 .task-detail {
   position: relative;	
-  width: min(100% - 2rem, 680px);
-  padding: clamp(1.5rem, 5vw, 2.5rem);
+  width: min(55rem, calc(100vw - 2rem));
+  padding: 1rem;
   border: 1px solid rgb(139 187 146);
   border-radius: 18px;
   background: var(--secondary-color);
@@ -98,13 +102,13 @@ const dateLabel = computed(() => task.value
   gap: 0.75rem;
 }
 
-.task-info p {
+.task-info-text{
 
   align-self: center;	
   width: fit-content;
   padding: 0.6rem 0.9rem;
   border-radius: 10px;
-  background: var(--tertiary-color);
+  border: 2px solid var(--tertiary-color);
   color: var(--text-color);
   line-height: 1.5;
 }
@@ -114,26 +118,55 @@ const dateLabel = computed(() => task.value
   text-align: center;
 }
 
-.back-button {
+.back-button, .edit-button {
+  display: inline-block;
   background: var(--tertiary-color);
   padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
   border: 1px solid var(--tertiary-color);
   border-radius: 0.5rem;
   color: var(--text-color);
   text-decoration: none;
 }
-.back-button:hover {
+.back-button:hover, .edit-button:hover {
   background: var(--main-color);
   color: var(--text-color);
 }
-.edit-button {
-  display: inline-flex;
-  margin-top: 0.5rem;
-  padding: 0.65rem 1rem;
-  border-radius: 0.5rem;
-  background: var(--main-color);
+
+.priority-low {
+  border: 2px solid rgb(59 130 246 / 50%);
+  background: rgb(59 130 246 / 20%);
   color: var(--text-color);
-  text-decoration: none;
+  align-self: center;	
+  width: fit-content;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  color: var(--text-color);
+  line-height: 1.5;
 }
-.edit-button:hover { background: var(--tertiary-color); }
+
+.priority-medium {
+  border: 2px solid rgb(255 193 7 / 50%);
+  background: rgb(255 193 7 / 20%);
+  color: var(--text-color);
+  align-self: center;	
+  width: fit-content;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.priority-high {
+  border: 2px solid rgb(255 107 107 / 50%);
+  background: rgb(255 107 107 / 30%);
+  color: var(--text-color);align-self: center;	
+  width: fit-content;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+
 </style>
