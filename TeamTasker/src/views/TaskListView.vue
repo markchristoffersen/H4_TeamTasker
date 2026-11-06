@@ -26,8 +26,9 @@ const filteredTasks = computed(() => {
 </script>
 
 <template>
-  <RouterLink to="/create">Create a task ↗</RouterLink>
+  
   <TaskFilters v-model:search="search" v-model:status="status" v-model:priority="priority" />
+  <RouterLink class="button-create" to="/create">Create a task ↗</RouterLink>
 	<div class="task-grid">
 		<TaskCard v-for="(task, index) in filteredTasks" :key="task.id" :task="task" :index="index" />
 	</div>
@@ -41,6 +42,22 @@ const filteredTasks = computed(() => {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 1rem;
 		padding: 2% 10%;
+	}
+	.button-create {
+		display: inline-block;
+		position: relative;
+		left: 100%;
+		transform: translateX(-100%);
+		background-color: var(--tertiary-color);
+		border: 2px solid var(--tertiary-color);
+		padding: 0.5rem 0.5rem;
+		margin: 1rem 0;
+		border-radius:  0.5rem;
+		color: var(--text-color);
+	}
+	.button-create:hover {
+		background-color: var(--main-color);
+		border: 2px solid var(--tertiary-color);
 	}
 	
 	

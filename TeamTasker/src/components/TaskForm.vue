@@ -86,22 +86,23 @@ function submitForm() {
 <style scoped>
 .task-form { display: grid; gap: 22px; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.form-field { display: grid; gap: 8px; color: var(--ink); font-size: 12px; font-weight: 600; }
+.form-field { display: grid; gap: 8px; color: var(--text-color); font-size: 12px; font-weight: 600; }
 .form-field input,
 .form-field select,
-.form-field textarea { width: 100%; min-height: 47px; border: 1px solid var(--line); border-radius: 6px; padding: 12px 13px; outline-color: var(--accent); background: var(--paper); color: var(--ink); font: inherit; font-size: 12px; font-weight: 400; }
+.form-field textarea { outline: none; width: 100%; min-height: 47px; border: 1px solid var(--accent-color); border-radius: 6px; padding: 12px 13px; background: var(--tertiary-color); color: var(--text-color); font: inherit; font-size: 12px; font-weight: 400; }
 .form-field textarea { resize: vertical; }
 .form-field input::placeholder,
-.form-field textarea::placeholder { color: #a09f98; }
+.form-field textarea::placeholder { color: var(--text-color); }
 .required-mark { color: var(--accent); }
 .form-error { margin: -8px 0 0; color: #a24537; font-size: 12px; }
-.form-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; }
-.form-actions p { margin: 0; color: var(--muted); font-size: 11px; }
+.form-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px;}
+.form-actions p { margin: 0; color: var(--text-color); font-size: 11px; }
 .action-buttons { display: flex; align-items: center; gap: 10px; }
-.button-primary { display: inline-flex; min-height: 46px; align-items: center; gap: 24px; border: 0; border-radius: 5px; padding: 0 18px; background: var(--ink); color: white; cursor: pointer; font: inherit; font-size: 12px; transition: background 160ms ease; }
-.button-primary:hover { background: var(--accent); }
+.button-primary { display: inline-flex; min-height: 46px; align-items: center; gap: 24px; border: 0; border-radius: 5px; padding: 0 18px; background: var(--tertiary-color); color: var(--text-color); cursor: pointer; font: inherit; font-size: 12px; transition: background 160ms ease; border: 2px solid var(--tertiary-color);}
+.button-secondary:hover,
+.button-primary:hover { background: var(--main-color); border: 2px solid var(--tertiary-color);}
 .button-primary span { font-size: 16px; }
-.button-secondary { min-height: 46px; border: 1px solid var(--line); border-radius: 5px; padding: 0 16px; background: transparent; color: var(--ink); cursor: pointer; font: inherit; font-size: 12px; }
+.button-secondary { min-height: 46px; border: 1px solid var(--tertiary-color); border-radius: 5px; padding: 0 16px; background: var(--tertiary-color); color: var(--text-color); cursor: pointer; font: inherit; font-size: 12px; }
 
 @media (max-width: 540px) {
   .field-row { grid-template-columns: 1fr; }
