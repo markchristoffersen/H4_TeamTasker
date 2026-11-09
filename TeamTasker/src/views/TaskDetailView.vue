@@ -19,7 +19,7 @@ const dateLabel = computed(() => task.value
     ? new Intl.DateTimeFormat('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(`${task.value.date}T12:00:00`))
     : '')
 
-const priorityClass = computed(() => `priority-${task.value.priority.toLowerCase()}`)
+const priorityClass = computed(() => `priority-${task.value?.priority.toLowerCase()}`)
 </script>
 
 <template>

@@ -23,6 +23,10 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 
 See [Vite Configuration Reference](https://vite.dev/config/).
 
+## Task API behavior
+
+Tasks are loaded from JSONPlaceholder's posts endpoint. Creating or editing a task sends a `POST` request to `https://jsonplaceholder.typicode.com/posts` with the task title, description, user, status, priority, and due date. JSONPlaceholder simulates writes rather than persisting them, so successful changes are kept in the app's in-memory task list and are lost when the page is reloaded.
+
 ## Project Setup
 
 ```sh
