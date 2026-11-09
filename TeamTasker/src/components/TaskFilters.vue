@@ -35,6 +35,14 @@ const emit = defineEmits<{
       </select>
       <span class="select-chevron" aria-hidden="true">⌄</span>
     </label>
+    <button
+      class="clear-filters"
+      type="button"
+      :disabled="!search && !status && !priority"
+      @click="emit('update:search', ''); emit('update:status', ''); emit('update:priority', '')"
+    >
+      Clear filters
+    </button>
   </section>
 </template>
 
@@ -57,11 +65,14 @@ kbd { flex: none; border: 1px solid var(--accent-color); border-radius: 4px; pad
 select { width: 100%; appearance: none; cursor: pointer; }
 .select-chevron { position: absolute; right: 13px; color: var(--text-color); pointer-events: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%);}
+.clear-filters { min-height: 49px; padding: 0 14px; border: 1px solid var(--accent-color); border-radius: 7px; background: var(--tertiary-color); color: var(--text-color); font: inherit; font-size: 12px; cursor: pointer; }
+.clear-filters:disabled { cursor: not-allowed; opacity: 0.6; }
 
 @media (max-width: 540px) {
   .filter-bar { flex-direction: column; }
   .status-field { width: 100%; }
   .priority-field { width: 100%; }
+  .clear-filters { width: 100%; }
   kbd { display: none; }
 }
 </style>
