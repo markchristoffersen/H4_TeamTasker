@@ -3,7 +3,12 @@ import { reactive, ref, watch } from 'vue'
 import { TASK_STATUS, TASK_PRIORITY, type NewTask, type TaskItem } from '../types/task'
 import { getTaskFormError, todayAsDateString, type TaskFormValues } from '../utils/taskForm'
 
-const props = withDefaults(defineProps<{ initialTask?: TaskItem; isEditing?: boolean }>(), { isEditing: false })
+const props = withDefaults(defineProps<{
+  initialTask?: TaskItem
+  isEditing?: boolean
+  isSubmitting?: boolean
+  saveError?: string
+}>(), { isEditing: false, isSubmitting: false, saveError: '' })
 const emit = defineEmits<{ submit: [task: NewTask]; cancel: [] }>()
 
 const form = reactive<TaskFormValues>({
@@ -47,7 +52,7 @@ function submitForm() {
     <div class="field-row">
       <label class="form-field">
         <span>Task title <span class="required-mark">*</span></span>
-        <input v-model="form.title" type="text" placeholder="e.g. A morning of creative thinking" required maxlength="100" />
+        <input v-model="form.title" type="text" placeholder="Title for your task" required maxlength="100" />
       </label>
       <label class="form-field">
         <span>Priority <span class="required-mark">*</span></span>
@@ -73,11 +78,14 @@ function submitForm() {
       <textarea v-model="form.description" rows="4" placeholder="What is your issue?" maxlength="500"></textarea>
     </label>
     <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
+    <p v-if="saveError" class="form-error" role="alert">{{ saveError }}</p>
     <div class="form-actions">
       <p><span class="required-mark">*</span> Required fields</p>
       <div class="action-buttons">
-        <button class="button-secondary" type="button" @click="emit('cancel')">Cancel</button>
-        <button class="button-primary" type="submit">{{ isEditing ? 'Save changes' : 'Create task' }} <span aria-hidden="true">↗</span></button>
+        <button class="button-secondary" type="button" :disabled="isSubmitting" @click="emit('cancel')">Cancel</button>
+        <button class="button-primary" type="submit" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Saving…' : isEditing ? 'Save changes' : 'Create task' }} <span aria-hidden="true">↗</span>
+        </button>
       </div>
     </div>
   </form>

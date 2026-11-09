@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import TaskForm from '../components/TaskForm.vue'
 import { useTasks } from '../composables/useTasks'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import type { NewTask } from '../types/task'
 
 const route = useRoute()
 const router = useRouter()
 const { addTask, updateTask, getTaskById, isLoading, errorMessage } = useTasks()
+const isSubmitting = ref(false)
+const saveError = ref('')
 
 const isEditing = computed(() => route.name === 'task-edit')
 
@@ -24,16 +26,33 @@ const cancelTo = computed(() => isEditing.value && taskId.value !== undefined
   ? { name: 'task-detail', params: { id: taskId.value } }
   : { name: 'task-list' })
 
-function saveTask(values: NewTask) {
-  let savedTask
-  if (isEditing.value) {
-    const id = taskId.value
-    if (id === undefined || !task.value) return
-    savedTask = updateTask(id, values)
-  } else {
-    savedTask = addTask(values)
+async function saveTask(values: NewTask) {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+  saveError.value = ''
+
+  try {
+    let savedTask
+    if (isEditing.value) {
+      const id = taskId.value
+      if (id === undefined || !task.value) return
+      savedTask = await updateTask(id, values)
+    } else {
+      savedTask = await addTask(values)
+    }
+
+    if (!savedTask) {
+      saveError.value = 'This task could not be found.'
+      return
+    }
+    await router.push({ name: 'task-detail', params: { id: savedTask.id } })
+  } catch (error) {
+    saveError.value = error instanceof Error
+      ? error.message
+      : 'We couldn’t save the task. Please try again.'
+  } finally {
+    isSubmitting.value = false
   }
-  if (savedTask) router.push({ name: 'task-detail', params: { id: savedTask.id } })
 }
 
 function cancelForm() {
@@ -48,7 +67,14 @@ function cancelForm() {
       <h1 id="task-form-title">{{ isEditing ? 'Edit task' : 'Create a task' }}</h1>
       <p v-if="isEditing && isLoading && !task" class="form-status" role="status">Loading task…</p>
       <template v-else-if="!isEditing || task">
-        <TaskForm :initial-task="task" :is-editing="isEditing" @submit="saveTask" @cancel="cancelForm" />
+        <TaskForm
+          :initial-task="task"
+          :is-editing="isEditing"
+          :is-submitting="isSubmitting"
+          :save-error="saveError"
+          @submit="saveTask"
+          @cancel="cancelForm"
+        />
       </template>
       <div v-else class="form-status" role="alert">
         <p>{{ errorMessage || 'This task could not be found.' }}</p>

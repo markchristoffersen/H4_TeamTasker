@@ -48,7 +48,7 @@ const emit = defineEmits<{
 .search-field { flex: 1; gap: 10px; padding: 0 14px; background: var(--tertiary-color);border: 1px solid var(--accent-color);}
 .search-icon { color: var(--text-color); font-size: 24px; line-height: 1; transform: rotate(-20deg); }
 input,
-select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: 12px; }
+select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text-color); font: inherit; font-size: 12px; }
 input { width: 100%; }
 input::placeholder { color: var(--text-color) }
 kbd { flex: none; border: 1px solid var(--accent-color); border-radius: 4px; padding: 3px 6px; color: var(--text-color); font-family: inherit; font-size: 9px; }

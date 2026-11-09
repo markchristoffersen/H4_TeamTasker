@@ -7,6 +7,7 @@ const errorMessage = ref('')
 const localTasks = ref<TaskItem[]>([])
 let hasFetched = false
 let nextLocalId = -1
+const TASKS_API_URL = 'https://jsonplaceholder.typicode.com/posts'
 
 const statusus = computed(() => [...new Set(tasks.value.map((task) => task.status))].sort())
 const priorities = computed(() => [...new Set(tasks.value.map((task) => task.priority))].sort())
@@ -52,31 +53,65 @@ async function fetchTasks() {
     }
 }
 
-function addTask(task: NewTask) {
-    const newTask: TaskItem = { ...task, userId: 1, id: nextLocalId-- }
+async function postTask(task: NewTask, userId: number, id?: number) {
+    const payload = {
+        title: task.title,
+        body: task.description,
+        userId,
+        status: task.status,
+        priority: task.priority,
+        date: task.date,
+        ...(id === undefined ? {} : { id }),
+    }
+
+    try {
+        const response = await fetch(TASKS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        })
+        if (!response.ok) throw new Error()
+    } catch {
+        throw new Error('We couldn’t save the task. Please check your connection and try again.')
+    }
+}
+
+function storeTask(task: TaskItem) {
+    const taskIndex = tasks.value.findIndex((currentTask) => currentTask.id === task.id)
+    if (taskIndex === -1) {
+        tasks.value.unshift(task)
+    } else {
+        tasks.value.splice(taskIndex, 1, task)
+    }
+
+    const localTaskIndex = localTasks.value.findIndex((currentTask) => currentTask.id === task.id)
+    if (localTaskIndex === -1) {
+        localTasks.value.unshift(task)
+    } else {
+        localTasks.value.splice(localTaskIndex, 1, task)
+    }
+}
+
+async function addTask(task: NewTask) {
+    const id = nextLocalId--
+    const newTask: TaskItem = { ...task, userId: 1, id }
+    await postTask(task, newTask.userId)
     errorMessage.value = ''
-    localTasks.value.unshift(newTask)
-    tasks.value.unshift(newTask)
+    storeTask(newTask)
     return newTask
 }
 
-function updateTask(id: number, task: NewTask) {
-    const taskIndex = tasks.value.findIndex((currentTask) => currentTask.id === id)
-    if (taskIndex === -1) return undefined
-
-    const currentTask = tasks.value[taskIndex]
+async function updateTask(id: number, task: NewTask) {
+    const currentTask = tasks.value.find((currentTask) => currentTask.id === id)
     if (!currentTask) return undefined
 
-    const updatedTask: TaskItem = { ...currentTask, ...task }
-    tasks.value.splice(taskIndex, 1, updatedTask)
+    await postTask(task, currentTask.userId, id)
+    const latestTask = tasks.value.find((currentTask) => currentTask.id === id)
+    if (!latestTask) return undefined
 
-    const localTaskIndex = localTasks.value.findIndex((currentTask) => currentTask.id === id)
-    if (localTaskIndex === -1) {
-        localTasks.value.unshift(updatedTask)
-    } else {
-        localTasks.value.splice(localTaskIndex, 1, updatedTask)
-    }
-
+    const updatedTask: TaskItem = { ...latestTask, ...task }
+    storeTask(updatedTask)
+    errorMessage.value = ''
     return updatedTask
 }
 
